@@ -52,3 +52,23 @@ jobs:
 
           TGT_BRANCH_NAME="${{ github.base_ref || github.ref_name }}"
           echo "TGT_BRANCH_NAME is: $TGT_BRANCH_NAME"
+
+      # Only run this for branch (PR and push, not tag)
+      - name: Ensure go module files are up-to-date (main branch)
+        if: github.ref_type == 'branch'
+        run: |
+          TGT_BRANCH_NAME="${{ github.base_ref || github.ref_name }}"
+          echo "TGT_BRANCH_NAME is: $TGT_BRANCH_NAME"
+
+          DEF_BRANCH_NAME="${{ github.event.repository.default_branch }}"
+          echo "DEF_BRANCH_NAME: $DEF_BRANCH_NAME"
+
+          CUST_IMG_TAG=$TGT_BRANCH_NAME
+          # For main use "latest"
+          if [ "$TGT_BRANCH_NAME" == "$DEF_BRANCH_NAME" ]; then
+            CUST_IMG_TAG="latest"
+          fi
+
+          echo "Using CUST_IMG_TAG: $CUST_IMG_TAG"
+
+
