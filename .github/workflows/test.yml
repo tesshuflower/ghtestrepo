@@ -35,8 +35,20 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          echo "github.base_ref: {{ github.base_ref }}"
-          echo "github.ref_type: {{ github.ref_type }}"
-          echo "github.event.repository.default_branch: {{ github.event.repository.default_branch }}"
+          GH_BASE_REF="${{ github.base_ref }}"
+          echo "github.base_ref: $GH_BASE_REF"
+
+          GH_HEAD_REF="${{ github.head_ref }}"
+          echo "github.head_ref: $GH_HEAD_REF"
+
+          GH_REF_TYPE="${{ github.ref_type }}"
+          echo "github.ref_type: $GH_REF_TYPE"
+
+          GH_DEF_BRANCH="${{ github.event.repository.default_branch }}"
+          echo "github.event.repository.default_branch: $GH_DEF_BRANCH"
+
           BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
           echo "BRANCH_NAME is: $BRANCH_NAME"
+
+          TGT_BRANCH_NAME="${{ github.base_ref || github.ref_name }}"
+          echo "TGT_BRANCH_NAME is: $TGT_BRANCH_NAME"
