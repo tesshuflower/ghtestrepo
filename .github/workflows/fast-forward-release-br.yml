@@ -1,7 +1,7 @@
 ---
 # yamllint disable rule:line-length
 
-name: fast forward main to current release branch
+name: fast forward current release branch to main
 on:  # yamllint disable-line rule:truthy
   push:
     branches: [ main ]
@@ -16,18 +16,19 @@ env:
 jobs:
   # Fast forward the current RELEASE_BRANCH with latest commits in main
   fast-forward-release-br:
-    name: Attach kubectl-volsync asset and open krew PR
+    name: Fast forward release branch
     runs-on: ubuntu-24.04
-    if: ${{ env.RELEASE_BRANCH != '' }}
 
     steps:
       - name: Checkout source
+        if: ${{ env.RELEASE_BRANCH != '' }}
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           # Fetch whole history so we can see all commits
           fetch-depth: 0
 
       - name: ffwd
+        if: ${{ env.RELEASE_BRANCH != '' }}
         run: |
           echo "ffwding $RELEASE_BRANCH to latest from main ..."
           git config user.name "ffwd workflow"
