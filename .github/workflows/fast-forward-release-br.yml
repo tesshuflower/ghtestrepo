@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 env:
-  RELEASE_BRANCH: "" # set to "" to skip ffwding
+  RELEASE_BRANCH: "release-0.2" # set to "" to skip ffwding
 
 jobs:
   # Fast forward the current RELEASE_BRANCH with latest commits in main
