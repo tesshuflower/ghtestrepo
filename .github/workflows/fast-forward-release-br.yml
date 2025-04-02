@@ -20,6 +20,11 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+      - name: Skip job check
+        if: ${{ env.RELEASE_BRANCH == '' }}
+        run: |
+          echo "Skipping ffwding, no RELEASE_BRANCH specified"
+
       - name: Checkout source
         if: ${{ env.RELEASE_BRANCH != '' }}
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
