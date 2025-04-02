@@ -1,0 +1,40 @@
+---
+# yamllint disable rule:line-length
+
+name: fast forward main to current release branch
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # Useful for testing, but not necessary
+
+permissions:
+  contents: write
+
+env:
+  RELEASE_BRANCH: "" # set to "" to skip ffwding
+
+jobs:
+  # Fast forward the current RELEASE_BRANCH with latest commits in main
+  fast-forward-release-br:
+    name: Attach kubectl-volsync asset and open krew PR
+    runs-on: ubuntu-24.04
+    if: ${{ env.RELEASE_BRANCH != '' }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          # Fetch whole history so we can see all commits
+          fetch-depth: 0
+
+      - name: ffwd
+        run: |
+          echo "ffwding $RELEASE_BRANCH to latest from main ..."
+          git config user.name "ffwd workflow"
+          git config user.email ""
+          git fetch origin $RELEASE_BRANCH
+          git checkout $RELEASE_BRANCH
+          git merge origin/main --ff-only
+          git push origin $RELEASE_BRANCH
+          echo "ffwding complete."
+
